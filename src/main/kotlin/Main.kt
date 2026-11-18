@@ -1,16 +1,36 @@
 package ie.setu
 
-//TIP To <b>Run</b> code, press <shortcut actionId="Run"/> or
-// click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
 fun main() {
-    val name = "Kotlin"
-    //TIP Press <shortcut actionId="ShowIntentionActions"/> with your caret at the highlighted text
-    // to see how IntelliJ IDEA suggests fixing it.
-    println("Hello, " + name + "!")
+    var option: Int
 
-    for (i in 1..5) {
-        //TIP Press <shortcut actionId="Debug"/> to start debugging your code. We have set one <icon src="AllIcons.Debugger.Db_set_breakpoint"/> breakpoint
-        // for you, but you can always add more by pressing <shortcut actionId="ToggleLineBreakpoint"/>.
-        println("i = $i")
-    }
+    do {
+        mainMenu()
+
+        print("Enter your choice: ")
+        option = readln().toIntOrNull() ?: -1
+
+        when (option) {
+            1 -> println("Manage Ingredients")
+            2 -> println("Manage Potions")
+            3 -> println("Manage Recipes")
+            4 -> println("View Inventory")
+            0 -> println("Goodbye!")
+            else -> println("Invalid option. Please try again.")
+        }
+    } while (option != 0)
+}
+
+fun mainMenu() {
+    println("""
+        ==============================
+              ARCANE INVENTORY
+        ==============================
+        1. Manage Ingredients
+        2. Manage Potions
+        3. Manage Recipes
+        4. View Inventory
+
+        0. Exit
+        ==============================
+    """.trimIndent())
 }
