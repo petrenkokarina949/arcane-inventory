@@ -1,4 +1,5 @@
 package ie.setu
+import ie.setu.menus.runIngredientMenu
 
 fun main() {
     var option: Int
@@ -10,7 +11,7 @@ fun main() {
         option = readln().toIntOrNull() ?: -1
 
         when (option) {
-            1 -> println("Manage Ingredients")
+            1 -> runIngredientMenu()
             2 -> println("Manage Potions")
             3 -> println("Manage Recipes")
             4 -> println("View Inventory")
