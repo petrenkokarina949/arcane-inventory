@@ -30,4 +30,29 @@ class PotionAPI {
             }
         }
     }
+    fun findPotion(id: Int): Potion? {
+        return potions.find { potion -> potion.id == id }
+    }
+    fun isValidId(id: Int): Boolean {
+        return potions.any { potion -> potion.id == id }
+    }
+    fun update(id: Int, potion: Potion): Boolean {
+        val foundPotion = findPotion(id)
+
+        if (foundPotion != null) {
+            foundPotion.name = potion.name
+            foundPotion.category = potion.category
+            foundPotion.rarity = potion.rarity
+            foundPotion.effect = potion.effect
+            foundPotion.quantity = potion.quantity
+            foundPotion.price = potion.price
+            foundPotion.description = potion.description
+            return true
+        }
+
+        return false
+    }
+    fun delete(id: Int): Boolean {
+        return potions.removeIf { potion -> potion.id == id }
+    }
 }
