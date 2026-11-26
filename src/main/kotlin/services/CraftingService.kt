@@ -47,4 +47,27 @@ class CraftingService(
                     ingredient.quantity >= requiredIngredient.quantity
         }
     }
+    fun craftPotion(recipeId: Int): Boolean {
+        if (!canCraft(recipeId)) {
+            return false
+        }
+
+        val recipe = recipeAPI.findRecipe(recipeId)
+            ?: return false
+
+        val potion = potionAPI.findPotion(recipe.potionId)
+            ?: return false
+
+        for (requiredIngredient in recipe.ingredients) {
+            val ingredient = ingredientAPI.findIngredient(
+                requiredIngredient.ingredientId
+            ) ?: return false
+
+            ingredient.quantity -= requiredIngredient.quantity
+        }
+
+        potion.quantity++
+
+        return true
+    }
 }
