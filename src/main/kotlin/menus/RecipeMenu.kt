@@ -2,8 +2,9 @@ package ie.setu.menus
 
 import ie.setu.controllers.RecipeAPI
 import ie.setu.models.Recipe
-
-internal val recipeAPI = RecipeAPI()
+import ie.setu.utils.isValidName
+import ie.setu.utils.isValidRecipeQuantity
+internal val recipeAPI = RecipeAPI(ingredientAPI, potionAPI)
 
 fun runRecipeMenu() {
     var option: Int
@@ -56,7 +57,12 @@ private fun readRecipeDetails(): Recipe? {
     }
 
     print("Enter recipe name: ")
-    val name = readln().trim()
+    var name = readln().trim()
+
+    while (!isValidName(name)) {
+        print("Invalid name. Try again: ")
+        name = readln().trim()
+    }
 
     println("Available potions:")
     println(potionAPI.listAllPotions())
@@ -227,7 +233,7 @@ private fun addIngredientToRecipe() {
     print("Enter required quantity: ")
     val quantity = readln().toIntOrNull()
 
-    if (quantity == null || quantity <= 0) {
+    if (quantity == null || !isValidRecipeQuantity(quantity)) {
         println("Invalid quantity.")
         return
     }
@@ -262,7 +268,7 @@ private fun updateRecipeIngredient() {
     print("Enter new required quantity: ")
     val quantity = readln().toIntOrNull()
 
-    if (quantity == null || quantity <= 0) {
+    if (quantity == null || !isValidRecipeQuantity(quantity)) {
         println("Invalid quantity.")
         return
     }

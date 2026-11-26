@@ -195,7 +195,10 @@ private fun deleteIngredient() {
         println("Invalid ingredient ID.")
         return
     }
-
+    if (recipeAPI.isIngredientUsed(id)) {
+        println("Cannot delete ingredient. It is used in a recipe.")
+        return
+    }
     print("Are you sure you want to delete this ingredient? (y/n): ")
     val confirmation = readln().trim()
 

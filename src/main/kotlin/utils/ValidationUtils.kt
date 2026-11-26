@@ -3,6 +3,7 @@ package ie.setu.utils
 import ie.setu.models.Ingredient
 import java.util.Locale
 import ie.setu.models.Potion
+import ie.setu.models.Recipe
 val categories = arrayOf(
     "Herb",
     "Mineral",
@@ -71,4 +72,19 @@ fun isValidPotion(potion: Potion): Boolean {
             isValidEffect(potion.effect) &&
             isValidQuantity(potion.quantity) &&
             isValidPrice(potion.price)
+}
+fun isValidRecipeQuantity(quantity: Int): Boolean {
+    return quantity > 0
+}
+
+fun isValidRecipe(recipe: Recipe): Boolean {
+    return isValidName(recipe.name) &&
+            recipe.potionId >= 0 &&
+            recipe.ingredients.all { ingredient ->
+                ingredient.ingredientId >= 0 &&
+                        isValidRecipeQuantity(ingredient.quantity)
+            } &&
+            recipe.ingredients.distinctBy { ingredient ->
+                ingredient.ingredientId
+            }.size == recipe.ingredients.size
 }

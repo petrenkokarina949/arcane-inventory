@@ -146,7 +146,10 @@ private fun deletePotion() {
         println("Invalid potion ID.")
         return
     }
-
+    if (recipeAPI.isPotionUsed(id)) {
+        println("Cannot delete potion. It is used in a recipe.")
+        return
+    }
     print("Are you sure you want to delete this potion? (y/n): ")
     val confirmation = readln().trim()
 

@@ -2,8 +2,12 @@ package ie.setu.controllers
 
 import ie.setu.models.Recipe
 import ie.setu.models.RecipeIngredient
-
-class RecipeAPI {
+import ie.setu.utils.isValidRecipe
+import ie.setu.utils.isValidRecipeQuantity
+class RecipeAPI(
+    private val ingredientAPI: IngredientAPI,
+    private val potionAPI: PotionAPI
+) {
 
     private var recipes = ArrayList<Recipe>()
     private var lastId = 0
@@ -13,6 +17,14 @@ class RecipeAPI {
     }
 
     fun add(recipe: Recipe): Boolean {
+        if (!isValidRecipe(recipe) ||
+            !potionAPI.isValidId(recipe.potionId) ||
+            !recipe.ingredients.all { ingredient ->
+                ingredientAPI.isValidId(ingredient.ingredientId)
+            }) {
+            return false
+        }
+
         recipe.id = getId()
         return recipes.add(recipe)
     }
@@ -50,10 +62,16 @@ class RecipeAPI {
                     "Ingredients: ${recipe.ingredients.size}"
         }.ifEmpty { "No matching recipes found" }
     }
-    fun addIngredient(recipeId: Int, ingredientId: Int, quantity: Int): Boolean {
+    fun addIngredient(
+        recipeId: Int,
+        ingredientId: Int,
+        quantity: Int
+    ): Boolean {
         val recipe = findRecipe(recipeId)
 
-        if (recipe == null || quantity <= 0) {
+        if (recipe == null ||
+            !isValidRecipeQuantity(quantity) ||
+            !ingredientAPI.isValidId(ingredientId)) {
             return false
         }
 
@@ -74,7 +92,7 @@ class RecipeAPI {
     ): Boolean {
         val recipe = findRecipe(recipeId)
 
-        if (recipe == null || quantity <= 0) {
+        if (recipe == null || !isValidRecipeQuantity(quantity)) {
             return false
         }
 
@@ -101,6 +119,11 @@ class RecipeAPI {
         }
     }
     fun update(id: Int, recipe: Recipe): Boolean {
+        if (!isValidRecipe(recipe) ||
+            !potionAPI.isValidId(recipe.potionId)) {
+            return false
+        }
+
         val foundRecipe = findRecipe(id)
 
         if (foundRecipe != null) {
@@ -116,6 +139,19 @@ class RecipeAPI {
     fun delete(id: Int): Boolean {
         return recipes.removeIf { recipe ->
             recipe.id == id
+        }
+    }
+    fun isIngredientUsed(ingredientId: Int): Boolean {
+        return recipes.any { recipe ->
+            recipe.ingredients.any { ingredient ->
+                ingredient.ingredientId == ingredientId
+            }
+        }
+    }
+
+    fun isPotionUsed(potionId: Int): Boolean {
+        return recipes.any { recipe ->
+            recipe.potionId == potionId
         }
     }
 }
