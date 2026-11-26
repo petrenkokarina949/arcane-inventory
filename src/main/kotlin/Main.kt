@@ -18,7 +18,7 @@ fun main() {
             3 -> runRecipeMenu()
             4 -> println("View Inventory")
             0 -> println("Goodbye!")
-            else -> println("Invalid option. Please try again.")
+       else -> println("Invalid option. Please try again.")
         }
     } while (option != 0)
 }
