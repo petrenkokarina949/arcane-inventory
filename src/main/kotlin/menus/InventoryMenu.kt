@@ -66,9 +66,15 @@ private fun craftPotion() {
     print("Enter recipe ID: ")
     val recipeId = readln().toIntOrNull()
 
-    if (recipeId == null ||
-        craftingService.findRecipe(recipeId) == null) {
+    if (recipeId == null) {
         println("Invalid recipe ID.")
+        return
+    }
+
+    val error = craftingService.getCraftingError(recipeId)
+
+    if (error.isNotEmpty()) {
+        println(error)
         return
     }
 

@@ -27,25 +27,46 @@ class CraftingService(
         return recipeAPI.listAllRecipes()
     }
     fun canCraft(recipeId: Int): Boolean {
+        return getCraftingError(recipeId).isEmpty()
+    }
+    fun getCraftingError(recipeId: Int): String {
         val recipe = recipeAPI.findRecipe(recipeId)
 
-        if (recipe == null || recipe.ingredients.isEmpty()) {
-            return false
+        if (recipe == null) {
+            return "Recipe not found."
         }
 
-        if (!potionAPI.isValidId(recipe.potionId)) {
-            return false
+        if (recipe.ingredients.isEmpty()) {
+            return "Recipe has no ingredients."
         }
 
-        return recipe.ingredients.all { requiredIngredient ->
+        val potion = potionAPI.findPotion(recipe.potionId)
+
+        if (potion == null) {
+            return "Potion not found."
+        }
+
+        for (requiredIngredient in recipe.ingredients) {
             val ingredient = ingredientAPI.findIngredient(
                 requiredIngredient.ingredientId
             )
 
-            ingredient != null &&
-                    requiredIngredient.quantity > 0 &&
-                    ingredient.quantity >= requiredIngredient.quantity
+            if (ingredient == null) {
+                return "Required ingredient not found."
+            }
+
+            if (requiredIngredient.quantity <= 0) {
+                return "Invalid required quantity."
+            }
+
+            if (ingredient.quantity < requiredIngredient.quantity) {
+                return "Not enough ${ingredient.name}. " +
+                        "Required: ${requiredIngredient.quantity}, " +
+                        "Available: ${ingredient.quantity}."
+            }
         }
+
+        return ""
     }
     fun craftPotion(recipeId: Int): Boolean {
         if (!canCraft(recipeId)) {
