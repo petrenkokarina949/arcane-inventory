@@ -26,4 +26,25 @@ class CraftingService(
     fun listAvailableRecipes(): String {
         return recipeAPI.listAllRecipes()
     }
+    fun canCraft(recipeId: Int): Boolean {
+        val recipe = recipeAPI.findRecipe(recipeId)
+
+        if (recipe == null || recipe.ingredients.isEmpty()) {
+            return false
+        }
+
+        if (!potionAPI.isValidId(recipe.potionId)) {
+            return false
+        }
+
+        return recipe.ingredients.all { requiredIngredient ->
+            val ingredient = ingredientAPI.findIngredient(
+                requiredIngredient.ingredientId
+            )
+
+            ingredient != null &&
+                    requiredIngredient.quantity > 0 &&
+                    ingredient.quantity >= requiredIngredient.quantity
+        }
+    }
 }
