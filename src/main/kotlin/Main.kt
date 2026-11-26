@@ -1,5 +1,6 @@
 package ie.setu
 import ie.setu.menus.runIngredientMenu
+import ie.setu.menus.runPotionMenu
 
 fun main() {
     var option: Int
@@ -12,7 +13,7 @@ fun main() {
 
         when (option) {
             1 -> runIngredientMenu()
-            2 -> println("Manage Potions")
+            2 -> runPotionMenu()
             3 -> println("Manage Recipes")
             4 -> println("View Inventory")
             0 -> println("Goodbye!")
