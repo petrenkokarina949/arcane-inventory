@@ -100,4 +100,22 @@ class RecipeAPI {
             ingredient.ingredientId == ingredientId
         }
     }
+    fun update(id: Int, recipe: Recipe): Boolean {
+        val foundRecipe = findRecipe(id)
+
+        if (foundRecipe != null) {
+            foundRecipe.name = recipe.name
+            foundRecipe.potionId = recipe.potionId
+            foundRecipe.description = recipe.description
+
+            return true
+        }
+
+        return false
+    }
+    fun delete(id: Int): Boolean {
+        return recipes.removeIf { recipe ->
+            recipe.id == id
+        }
+    }
 }
