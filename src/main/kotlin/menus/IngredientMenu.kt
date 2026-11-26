@@ -4,7 +4,7 @@ import ie.setu.controllers.IngredientAPI
 import ie.setu.models.Ingredient
 import ie.setu.utils.*
 
-private val ingredientAPI = IngredientAPI()
+internal val ingredientAPI = IngredientAPI()
 
 fun runIngredientMenu() {
     var option: Int

@@ -4,7 +4,7 @@ import ie.setu.controllers.PotionAPI
 import ie.setu.models.Potion
 import ie.setu.utils.*
 
-private val potionAPI = PotionAPI()
+internal val potionAPI = PotionAPI()
 fun runPotionMenu() {
     var option: Int
 
