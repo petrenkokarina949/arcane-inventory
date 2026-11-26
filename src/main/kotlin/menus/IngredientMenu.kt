@@ -4,7 +4,7 @@ import ie.setu.controllers.IngredientAPI
 import ie.setu.models.Ingredient
 import ie.setu.utils.*
 
-private val ingredientAPI = IngredientAPI()
+internal val ingredientAPI = IngredientAPI()
 
 fun runIngredientMenu() {
     var option: Int
@@ -195,7 +195,10 @@ private fun deleteIngredient() {
         println("Invalid ingredient ID.")
         return
     }
-
+    if (recipeAPI.isIngredientUsed(id)) {
+        println("Cannot delete ingredient. It is used in a recipe.")
+        return
+    }
     print("Are you sure you want to delete this ingredient? (y/n): ")
     val confirmation = readln().trim()
 
