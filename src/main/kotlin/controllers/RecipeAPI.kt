@@ -1,6 +1,7 @@
 package ie.setu.controllers
 
 import ie.setu.models.Recipe
+import ie.setu.models.RecipeIngredient
 
 class RecipeAPI {
 
@@ -48,5 +49,55 @@ class RecipeAPI {
                     "Potion ID: ${recipe.potionId} | " +
                     "Ingredients: ${recipe.ingredients.size}"
         }.ifEmpty { "No matching recipes found" }
+    }
+    fun addIngredient(recipeId: Int, ingredientId: Int, quantity: Int): Boolean {
+        val recipe = findRecipe(recipeId)
+
+        if (recipe == null || quantity <= 0) {
+            return false
+        }
+
+        if (recipe.ingredients.any { ingredient ->
+                ingredient.ingredientId == ingredientId
+            }) {
+            return false
+        }
+
+        return recipe.ingredients.add(
+            RecipeIngredient(ingredientId, quantity)
+        )
+    }
+    fun updateIngredientQuantity(
+        recipeId: Int,
+        ingredientId: Int,
+        quantity: Int
+    ): Boolean {
+        val recipe = findRecipe(recipeId)
+
+        if (recipe == null || quantity <= 0) {
+            return false
+        }
+
+        val foundIngredient = recipe.ingredients.find { ingredient ->
+            ingredient.ingredientId == ingredientId
+        }
+
+        if (foundIngredient != null) {
+            foundIngredient.quantity = quantity
+            return true
+        }
+
+        return false
+    }
+    fun removeIngredient(recipeId: Int, ingredientId: Int): Boolean {
+        val recipe = findRecipe(recipeId)
+
+        if (recipe == null) {
+            return false
+        }
+
+        return recipe.ingredients.removeIf { ingredient ->
+            ingredient.ingredientId == ingredientId
+        }
     }
 }
