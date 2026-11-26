@@ -37,38 +37,56 @@ fun runPotionMenu() {
         }
 
     } while (option != 0)}
-    private fun readPotionDetails(): Potion {
-        print("Enter potion name: ")
-        val name = readln().trim()
+private fun readPotionDetails(): Potion {
 
-        print("Enter category: ")
-        val category = readln().trim()
+    print("Enter potion name: ")
+    var name = readln().trim()
 
-        print("Enter rarity: ")
-        val rarity = readln().trim()
-
-        print("Enter effect: ")
-        val effect = readln().trim()
-
-        print("Enter quantity: ")
-        val quantity = readln().toIntOrNull() ?: 0
-
-        print("Enter price: ")
-        val price = readln().toDoubleOrNull() ?: 0.0
-
-        print("Enter description: ")
-        val description = readln().trim()
-
-        return Potion(
-            name = name,
-            category = category,
-            rarity = rarity,
-            effect = effect,
-            quantity = quantity,
-            price = price,
-            description = description
-        )
+    while (!isValidName(name)) {
+        print("Invalid name. Try again: ")
+        name = readln().trim()
     }
+
+    val category = selectPotionCategory()
+    val rarity = selectPotionRarity()
+
+    print("Enter effect: ")
+    var effect = readln().trim()
+
+    while (!isValidEffect(effect)) {
+        print("Invalid effect. Try again: ")
+        effect = readln().trim()
+    }
+
+    print("Enter quantity: ")
+    var quantity = readln().toIntOrNull()
+
+    while (quantity == null || !isValidQuantity(quantity)) {
+        print("Invalid quantity. Try again: ")
+        quantity = readln().toIntOrNull()
+    }
+
+    print("Enter price: ")
+    var price = readln().toDoubleOrNull()
+
+    while (price == null || !isValidPrice(price)) {
+        print("Invalid price. Try again: ")
+        price = readln().toDoubleOrNull()
+    }
+
+    print("Enter description: ")
+    val description = readln().trim()
+
+    return Potion(
+        name = name,
+        category = category,
+        rarity = rarity,
+        effect = effect,
+        quantity = quantity,
+        price = price,
+        description = description
+    )
+}
 private fun addPotion() {
     println("========== ADD POTION ==========")
 
@@ -188,4 +206,38 @@ private fun viewPotionDetails() {
     } else {
         println("Potion not found.")
     }
+}
+private fun selectPotionCategory(): String {
+    println("Select potion category:")
+
+    for (i in potionCategories.indices) {
+        println("${i + 1}. ${potionCategories[i]}")
+    }
+
+    print("Enter category number: ")
+    var choice = readln().toIntOrNull()
+
+    while (choice == null || choice !in 1..potionCategories.size) {
+        print("Invalid category. Try again: ")
+        choice = readln().toIntOrNull()
+    }
+
+    return potionCategories[choice - 1]
+}
+private fun selectPotionRarity(): String {
+    println("Select rarity:")
+
+    for (i in rarities.indices) {
+        println("${i + 1}. ${rarities[i]}")
+    }
+
+    print("Enter rarity number: ")
+    var choice = readln().toIntOrNull()
+
+    while (choice == null || choice !in 1..rarities.size) {
+        print("Invalid rarity. Try again: ")
+        choice = readln().toIntOrNull()
+    }
+
+    return rarities[choice - 1]
 }

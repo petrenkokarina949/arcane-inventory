@@ -2,6 +2,7 @@ package ie.setu.controllers
 
 import ie.setu.models.Potion
 import ie.setu.utils.formatPrice
+import ie.setu.utils.isValidPotion
 
 class PotionAPI {
 
@@ -12,9 +13,13 @@ class PotionAPI {
         return lastId++
     }
     fun add(potion: Potion): Boolean {
+        if (!isValidPotion(potion)) {
+            return false
+        }
         potion.id = getId()
         return potions.add(potion)
     }
+
     fun numberOfPotions(): Int {
         return potions.size
     }
@@ -37,6 +42,9 @@ class PotionAPI {
         return potions.any { potion -> potion.id == id }
     }
     fun update(id: Int, potion: Potion): Boolean {
+        if (!isValidPotion(potion)) {
+            return false
+        }
         val foundPotion = findPotion(id)
 
         if (foundPotion != null) {

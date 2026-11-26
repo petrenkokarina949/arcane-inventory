@@ -2,6 +2,7 @@ package ie.setu.utils
 
 import ie.setu.models.Ingredient
 import java.util.Locale
+import ie.setu.models.Potion
 val categories = arrayOf(
     "Herb",
     "Mineral",
@@ -17,6 +18,15 @@ val rarities = arrayOf(
     "Epic",
     "Legendary"
 )
+
+val potionCategories = arrayOf(
+    "Healing",
+    "Mana",
+    "Buff",
+    "Resistance",
+    "Poison"
+)
+
 fun isValidName(name: String): Boolean {
     return name.isNotBlank() && name.any { it.isLetter() }
 }
@@ -45,4 +55,20 @@ fun isValidIngredient(ingredient: Ingredient): Boolean {
 }
 fun formatPrice(price: Double): String {
     return String.format(Locale.US, "%.2f", price)
+}
+fun isValidPotionCategory(category: String): Boolean {
+    return category in potionCategories
+}
+
+fun isValidEffect(effect: String): Boolean {
+    return effect.isNotBlank()
+}
+
+fun isValidPotion(potion: Potion): Boolean {
+    return isValidName(potion.name) &&
+            isValidPotionCategory(potion.category) &&
+            isValidRarity(potion.rarity) &&
+            isValidEffect(potion.effect) &&
+            isValidQuantity(potion.quantity) &&
+            isValidPrice(potion.price)
 }
