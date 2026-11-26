@@ -12,6 +12,7 @@ class PotionAPI {
     private fun getId(): Int {
         return lastId++
     }
+
     fun add(potion: Potion): Boolean {
         if (!isValidPotion(potion)) {
             return false
@@ -23,6 +24,7 @@ class PotionAPI {
     fun numberOfPotions(): Int {
         return potions.size
     }
+
     fun listAllPotions(): String {
         return if (potions.isEmpty()) {
             "No potions stored"
@@ -35,12 +37,15 @@ class PotionAPI {
             }
         }
     }
+
     fun findPotion(id: Int): Potion? {
         return potions.find { potion -> potion.id == id }
     }
+
     fun isValidId(id: Int): Boolean {
         return potions.any { potion -> potion.id == id }
     }
+
     fun update(id: Int, potion: Potion): Boolean {
         if (!isValidPotion(potion)) {
             return false
@@ -60,16 +65,19 @@ class PotionAPI {
 
         return false
     }
+
     fun delete(id: Int): Boolean {
         return potions.removeIf { potion -> potion.id == id }
     }
-fun searchByName(searchString: String): String {
-    return potions.filter { potion ->
-        potion.name.contains(searchString, ignoreCase = true)
-    }.joinToString("\n") { potion ->
-        "${potion.id}: ${potion.name} | " +
-                "${potion.category} | ${potion.rarity} | " +
-                "Quantity: ${potion.quantity} | " +
-                "Price: ${formatPrice(potion.price)}"
-    }.ifEmpty { "No matching potions found" }
-}}
+
+    fun searchByName(searchString: String): String {
+        return potions.filter { potion ->
+            potion.name.contains(searchString, ignoreCase = true)
+        }.joinToString("\n") { potion ->
+            "${potion.id}: ${potion.name} | " +
+                    "${potion.category} | ${potion.rarity} | " +
+                    "Quantity: ${potion.quantity} | " +
+                    "Price: ${formatPrice(potion.price)}"
+        }.ifEmpty { "No matching potions found" }
+    }
+}
