@@ -28,10 +28,10 @@ fun runPotionMenu() {
         when (option) {
             1 -> addPotion()
             2 -> listPotions()
-            3 -> println("Search Potions")
+            3 -> searchPotions()
             4 -> updatePotion()
             5 -> deletePotion()
-            6 -> println("View Potion Details")
+            6 -> viewPotionDetails()
             0 -> println("Returning to main menu...")
             else -> println("Invalid option. Please try again.")
         }
@@ -140,5 +140,52 @@ private fun deletePotion() {
         }
     } else {
         println("Deletion cancelled.")
+    }
+}
+private fun searchPotions() {
+    println("========== SEARCH POTIONS ==========")
+
+    print("Enter potion name: ")
+    val searchString = readln().trim()
+
+    if (searchString.isBlank()) {
+        println("Search cannot be empty.")
+    } else {
+        println(potionAPI.searchByName(searchString))
+    }
+}
+private fun viewPotionDetails() {
+    println("========== POTION DETAILS ==========")
+
+    if (potionAPI.numberOfPotions() == 0) {
+        println("No potions stored.")
+        return
+    }
+
+    listPotions()
+
+    print("Enter potion ID: ")
+    val id = readln().toIntOrNull()
+
+    if (id == null) {
+        println("Invalid potion ID.")
+        return
+    }
+
+    val potion = potionAPI.findPotion(id)
+
+    if (potion != null) {
+        println("""
+            ID: ${potion.id}
+            Name: ${potion.name}
+            Category: ${potion.category}
+            Rarity: ${potion.rarity}
+            Effect: ${potion.effect}
+            Quantity: ${potion.quantity}
+            Price: ${formatPrice(potion.price)}
+            Description: ${potion.description}
+        """.trimIndent())
+    } else {
+        println("Potion not found.")
     }
 }

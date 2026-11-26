@@ -55,4 +55,13 @@ class PotionAPI {
     fun delete(id: Int): Boolean {
         return potions.removeIf { potion -> potion.id == id }
     }
-}
+fun searchByName(searchString: String): String {
+    return potions.filter { potion ->
+        potion.name.contains(searchString, ignoreCase = true)
+    }.joinToString("\n") { potion ->
+        "${potion.id}: ${potion.name} | " +
+                "${potion.category} | ${potion.rarity} | " +
+                "Quantity: ${potion.quantity} | " +
+                "Price: ${formatPrice(potion.price)}"
+    }.ifEmpty { "No matching potions found" }
+}}
