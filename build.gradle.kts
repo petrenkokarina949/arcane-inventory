@@ -20,3 +20,9 @@ kotlin {
 tasks.test {
     useJUnitPlatform()
 }
+dependencies {
+    implementation("tools.jackson.core:jackson-databind:3.1.4")
+    implementation("tools.jackson.module:jackson-module-kotlin:3.1.4")
+
+    testImplementation(kotlin("test"))
+}
